@@ -11,36 +11,66 @@ int main(void)
 {
 	
 	int should_run = 1;
-	
+    string hist[10];
+	int history = 0, history1 = 0;
 	while(should_run)
 	{
 		printf("osh>");
 		fflush(stdout);
 		//easier for me to use string
-		string a[5], hist[10];
+		string a[5];
 		//read in the line of input
 		getline(cin, a[0]);
-		int found[3], history = 1, history1 = 0;
-        if(a == "history")
+		int found[3];
+        while (a[0] == "history" || a[0][0] == '!')
         {
-            /////////
-        }
-        else if(isdigit(a[0]))
-        {//////////////
-            int i = stoi(a[0]);
-            if((i <= history) && (i >= history - 9))
+            if(a[0] == "history")
             {
-                a[0] = hist[history - i];
+                for(int i = 0;i< 10;i++)
+                {
+                    cout << history-i << ": " << hist[i] << endl;
+                }
             }
-            
+            if(a[0][0] == '!')
+            {
+                if(a[0][1] == '!')
+                {
+                    if(history1 != 0)
+                        a[0] = hist[history1-1];
+                    else
+                        a[0] = hist[9];
+                    break;
+                }
+                else
+                {
+                    a[0].erase(0,1);
+                    int i = stoi(a[0]);
+                    if((i <= history) && (i >= history - 9))
+                    {
+                        a[0] = hist[history - i];
+                        break;
+                    }
+                }
+            }
+            printf("osh>");
+            getline(cin, a[0]);
         }
-        if(history1 % 9 == 0)
-        {/////////////////
-            history1 = 0;
+        /*if(a[0][0] == '!')
+        {
+           
+        }
+        */
+        
+        hist[history1] = a[0];
+        cout << hist[history1] << " " << history1;
+        history++;
+        if(history1 < 9)
+        {
+            history1++;
         }
         else
         {
-            hist[history1] = a[0];
+            history1 = 0;
         }
 		//parse string with space being the divider
 		found[0] = a[0].find(" ");
